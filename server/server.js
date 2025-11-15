@@ -2,10 +2,10 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import connectDB from "./utils/connectDB.js";
-import userRoutes from "./routes/user.js";
-import recipeRoutes from "./routes/recipe.js";
-
+import connectDB from "./config/db.js";
+import userRoutes from "./routes/userRoutes.js";
+import recipeRoutes from "./routes/recipeRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 dotenv.config();
 connectDB();
 const app = express();
@@ -16,10 +16,9 @@ app.get("/", (req, res) => {
   res.send("Server is Running Fine");
 });
 
+app.use("/v4/auth", authRoutes);
 app.use("/v4/user", userRoutes);
 app.use("/v4/recipe", recipeRoutes);
-
-
 
 const PORT = 3000 || process.env.PORT;
 

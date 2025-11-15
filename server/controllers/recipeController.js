@@ -1,18 +1,23 @@
+import { json } from "express";
 import Recipe from "../models/recipe.js";
 
 export const addRecipe = async (req, res) => {
   try {
-    const { name, description, ingredient } = req.body;
-    if (!name || !description || !ingredient) {
+    const { title, description, ingredient, steps, category, cookingTime } =
+      req.body;
+    if (!title || !description || !ingredient) {
       return res.status(400).json({
         success: false,
         message: `Recipe not Added`,
       });
     }
     const newRecipe = new Recipe({
-      name,
+      title,
       description,
-      ingredient,
+      ingredient: JSON.parse(ingredient),
+      steps: JSON.parse(steps),
+      category,
+      cookingTime,
       image: req.file.path,
       author: req.user._id,
     });
@@ -103,6 +108,64 @@ export const editRecipe = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: `Error Occured ${error.message}`,
+    });
+  }
+};
+
+export const likeRecipe = async (req, res) => {
+  const userId = req.user._id;
+  const recipeId = req.params.id;
+  try {
+    const recipe = await Recipe.findById(recipeId);
+    if (!recipe) {
+      return res.status(404).json({
+        sucess: false,
+        message: "Recipe Not found",
+      });
+    }
+    const alreadyLiked = recipe.likes.includes(userId);
+    if (alreadyLiked) {
+      recipe.likes = recipe.likes.filter(
+        (id) => id.toString() !== user.toString()
+      );
+      await recipe.save();
+      return res.status(200).json({
+        success: true,
+        message: "Recipe Unliked ",
+        likes: recipe.likes.length,
+      });
+    }
+
+    recipe.likes.push(userId);
+    await recipe.save();
+    return res.status(200).json({
+      success: true,
+      message: "Recipe Liked Successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const getLikedRecipes = async (req, res) => {
+  const userId = req.user._id;
+  try {
+    const likedRecipes = await Recipe.find({ likes: userId }).populate(
+      "author",
+      "name email"
+    );
+    res.status(200).json({
+      success: true,
+      message: "Liked Recipes Found",
+      likedRecipes,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
     });
   }
 };

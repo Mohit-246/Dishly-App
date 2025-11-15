@@ -4,7 +4,7 @@ import generateTokens from "../config/jwtokens.js";
 
 export const register = async (req, res) => {
   try {
-    const {name, username, email, password} = req.body;
+    const { name, username, email, password } = req.body;
     if (!name || !username || !email || !password) {
       return res.status(400).json({
         success: false,
@@ -18,7 +18,7 @@ export const register = async (req, res) => {
         message: "User Already Exist",
       });
     }
-    
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
       name,
@@ -27,7 +27,7 @@ export const register = async (req, res) => {
       password: hashedPassword,
     });
     await newUser.save();
-    
+
     return res.status(201).json({
       success: true,
       message: "User Created Successfully",
@@ -44,64 +44,46 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
-    if ((!username && !email) || !password) {
+    const { identifier, password } = req.body;
+
+    if (!identifier || !password) {
       return res.status(400).json({
         success: false,
-        message: "Provide All Required Details",
+        message: "Provide all required details",
       });
     }
 
-    const detail = username || email;
-    const userExist = await User.findOne(detail);
+    let userExist;
+
+    // Check whether identifier is email or username
+    if (identifier.includes("@")) {
+      userExist = await User.findOne({ email: identifier });
+    } else {
+      userExist = await User.findOne({ username: identifier });
+    }
+
     if (!userExist) {
       return res.status(400).json({
         success: false,
-        message: "User Does not Exist",
+        message: "User does not exist",
       });
     }
+
     const isMatched = await bcrypt.compare(password, userExist.password);
+
     if (!isMatched) {
       return res.status(400).json({
         success: false,
-        message: "Invalid Credentials",
-      });
-    }
-    return res.status(200).json({
-      success: true,
-      message: "User Logged in Successfully",
-      userExist,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-export const getUser = async (req, res) => {
-  try {
-    const { id } = req.params;
-    if (!id) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid Request",
+        message: "Invalid credentials",
       });
     }
 
-    const user = await User.findById(id);
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
     return res.status(200).json({
       success: true,
-      message: "User found Successfully",
-      user,
+      message: "User logged in successfully",
+      user: userExist,
     });
+
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -130,53 +112,6 @@ export const getAllUser = async (req, res) => {
       success: true,
       message: "User found successfully",
       users,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-export const updatedUser = async (req, res) => {
-  try {
-    const { id } = req.params;
-    if (!id) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid Request",
-      });
-    }
-    const updatedUser = await User.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
-    return res.status(200).json({
-      success: true,
-      message: "User Updated Successfully",
-    });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-export const deleteUser = async (req, res) => {
-  try {
-    const { id } = req.params;
-    if (!id) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid Request",
-      });
-    }
-    const user = await User.findByIdAndDelete(id);
-    return res.status(200).json({
-      success: true,
-      message: "User Deleted Successfully",
-      user,
     });
   } catch (error) {
     return res.status(500).json({
