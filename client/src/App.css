@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+.primary-font {
+  font-family: "Nunito", sans-serif;
+}
+.secondary-font {
+  font-family: "Quicksand", sans-serif;
+}
+.para-font {
+  font-family: "Poppins", sans-serif;
+}
