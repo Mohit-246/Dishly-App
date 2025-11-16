@@ -7,8 +7,8 @@ const recipeSchema = new mongoose.Schema(
     ingredient: [String],
     steps: [String],
     image: { type: String, required: true },
-    cookingTime: Number,
-    difficulty: { type: String, enum: ["hard", "medium", "easy"] },
+    cookingTime: String,
+    difficulty: String,
     category: String,
     author: {
       type: mongoose.Schema.Types.ObjectId,

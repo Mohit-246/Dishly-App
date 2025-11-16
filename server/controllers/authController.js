@@ -25,6 +25,7 @@ export const register = async (req, res) => {
       username,
       email,
       password: hashedPassword,
+      avatar: req.file?.path,
     });
     await newUser.save();
 
@@ -83,7 +84,6 @@ export const login = async (req, res) => {
       message: "User logged in successfully",
       user: userExist,
     });
-
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -101,7 +101,7 @@ export const getAllUser = async (req, res) => {
         message: "Access Denied",
       });
     }
-    const users = await User.findOne();
+    const users = await User.find();
     if (!users) {
       return res.status(404).json({
         success: false,

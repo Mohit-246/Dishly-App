@@ -14,13 +14,14 @@ export const addRecipe = async (req, res) => {
     const newRecipe = new Recipe({
       title,
       description,
-      ingredient: JSON.parse(ingredient),
-      steps: JSON.parse(steps),
+      ingredient: ingredient,
+      steps: steps,
       category,
       cookingTime,
-      image: req.file.path,
+      image: req.file?.path,
       author: req.user._id,
     });
+
     await newRecipe.save();
     return res.status(201).json({
       success: true,
@@ -66,7 +67,7 @@ export const getRecipe = async (req, res) => {
 
 export const getAllRecipes = async (req, res) => {
   try {
-    const recipes = await Recipe.findOne();
+    const recipes = await Recipe.find();
     if (!recipes) {
       return res.status(404).json({
         success: false,
