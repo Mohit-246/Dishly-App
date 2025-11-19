@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useApi } from "./useApi";
 import { toast } from "react-toastify";
@@ -12,39 +12,38 @@ export default function useAuth() {
   const register = async (formData) => {
     const res = await post("/v4/auth/register", formData);
 
-    
     if (!res?.success) return;
 
     localStorage.setItem("token", res.token);
-    localStorage.setItem("user", res.newUser);
-    
-    navigate("/");
-    toast.success(res.message);
+
     setIsLoggedIn(true);
-    setUser(res.newUser);
+    setUser(res.user || res.newUser); // normalized
+
+    toast.success(res.message || "Registration Successfull");
+    navigate("/");
   };
-  
+
   const login = async (formData) => {
     const res = await post("/v4/auth/login", formData);
-    
-    if (!res?.success) return;
-    
-    localStorage.setItem("token", res.token);
-    localStorage.setItem("user", res.user);
 
-    toast.success(res.message);
-    navigate("/");
+    if (!res?.success) return;
+
+    localStorage.setItem("token", res.token);
+
     setIsLoggedIn(true);
     setUser(res.user);
+
+    toast.success(res.message || "Login Sucessfull");
+    navigate("/");
   };
 
   const getAllUsers = async () => {
-    const res = await get("/v4/auth/me");
+    const res = await get("/v4/auth/admin");
 
     if (!res?.success) return;
 
     setAllUser(res.users);
-    toast.success(res.message);
+    toast.success(res.message || "All user Fetched");
   };
 
   return { register, login, getAllUsers };

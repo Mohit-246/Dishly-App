@@ -11,7 +11,7 @@ export default function Register() {
     username: "",
     email: "",
     password: "",
-    image: File,
+    img: File,
   });
 
   const handleChange = (e) => {
@@ -31,15 +31,15 @@ export default function Register() {
     userDataToSend.append("email", formData.email);
     userDataToSend.append("password", formData.password);
     userDataToSend.append("username", formData.username);
-    userDataToSend.append("image", formData.image);
+    userDataToSend.append("avatar", formData.img);
 
-    register(formData);
+    register(userDataToSend);
     setFormData({
       name: "",
       username: "",
       email: "",
       password: "",
-      image: File,
+      img: File,
     });
   };
 
@@ -83,10 +83,10 @@ export default function Register() {
             <div className="w-full flex items-center rounded-full gap-2 px-4 py-3 bg-gray-300">
               <User size={20} />
               <input
-                type="text"
+                type="email"
                 name="email"
                 value={formData.email}
-                placeholder="email or username"
+                placeholder="email"
                 onChange={handleChange}
                 className="text-md font-semibold secondary-font focus:outline-none"
                 required

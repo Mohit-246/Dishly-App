@@ -1,13 +1,13 @@
 import React, { useContext, useRef, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import logo from "../assets/Logo.png";
+import useAuth from "../hooks/useAuth";
 
 export default function Navbar() {
-  const { isLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, logout, user } = useContext(AuthContext);
   const [menuOpen, setMenuOpen] = useState(false); //mobile menu toogle
   const inputRef = useRef(null);
-
   const location = useLocation();
 
   const shouldHide =
@@ -15,17 +15,24 @@ export default function Navbar() {
 
   // 🔵 Center-Origin Underline Animation
   const linkClasses = ({ isActive }) =>
-    `relative px-1 py-2
+    `relative px-1 py-2 font-extrabold text-md text-emerald-600
      after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2
      after:bottom-1 after:w-0 after:h-0.5 after:bg-emerald-600
      after:transition-all after:duration-300 hover:after:w-full
      ${isActive ? "after:w-full after:bg-blue-600 " : ""}`;
 
+  const navigate = useNavigate();
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+    logout();
+    navigate("/");
+  };
 
   return (
-    <nav className="w-full shadow-md flex items-center justify-evenly px-6 md:px-10 h-20">
+    <nav className="w-full shadow-md flex items-center justify-between px-6 md:px-10 h-20">
       {/* LOGO */}
-      <img src={logo} alt="" className="w-32" />
+      <img src={logo} alt="" className="w-28" />
 
       {/* DESKTOP VIEW —––––––––––––––––––––––––––––––––––––––––––––– */}
       {!shouldHide ? (
@@ -71,9 +78,9 @@ export default function Navbar() {
             </div>
           ) : (
             /* AFTER LOGIN */
-            <div className="hidden md:flex items-center gap-8 grow">
+            <div className="hidden md:flex items-center gap-6 grow">
               {/* NAVIGATION */}
-              <ul className="flex items-center gap-6  text-md primary-font px-6 py-2 rounded-md">
+              <ul className="flex items-center gap-6 primary-font px-6 py-2 rounded-md">
                 <NavLink to="/" className={linkClasses}>
                   Home
                 </NavLink>
@@ -84,6 +91,9 @@ export default function Navbar() {
 
                 <NavLink to="/reviews" className={linkClasses}>
                   Reviews
+                </NavLink>
+                <NavLink to={`/profile/@${user.username}`} className={linkClasses}>
+                  Profile
                 </NavLink>
               </ul>
 
@@ -111,17 +121,18 @@ export default function Navbar() {
 
               {/* CREATE BUTTON */}
               <NavLink to="/create">
-                <button className="px-4 py-2  bg-emerald-400 text-white text-shadow-2xs primary-font font-bold rounded-lg transform duration-200 hover:scale-110">
-                  Add
+                <button className="px-3 py-1 bg-emerald-400 text-white text-shadow-2xs primary-font font-bold rounded-lg transform duration-200 hover:scale-110">
+                  Create !
                 </button>
               </NavLink>
 
-              {/* PROFILE ICON */}
-              <NavLink to="/profile">
-                <div className="w-10 h-10 border-2 border-black rounded-full flex items-center justify-center font-bold cursor-pointer">
-                  A
-                </div>
-              </NavLink>
+              {/* LOGOUT BUTTON */}
+              <button
+                onClick={handleLogout}
+                className="px-3 py-1 border-2 border-emerald-400 text-emerald-600 text-shadow-2xs primary-font font-bold rounded-lg transform duration-200 hover:scale-110"
+              >
+                Logout
+              </button>
             </div>
           )}
         </>
@@ -135,7 +146,7 @@ export default function Navbar() {
 
       {/* MOBILE MENU BUTTON */}
       <button
-        className="md:hidden border-2 border-black px-3 py-1 rounded-md"
+        className="md:hidden px-3 py-1 border-2 border-emerald-400 text-emerald-600 text-shadow-2xs primary-font font-bold rounded-lg transform duration-200 hover:scale-110"
         onClick={() => setMenuOpen(!menuOpen)}
       >
         ☰
@@ -165,12 +176,12 @@ export default function Navbar() {
           {!isLoggedIn && (
             <>
               <NavLink to="/login">
-                <button className="w-full px-4 py-2 border-2 border-black rounded-lg">
+                <button className="px-3 py-1 border-2 border-emerald-400 text-emerald-600 text-shadow-2xs primary-font font-bold rounded-lg transform duration-200 hover:scale-110">
                   Login
                 </button>
               </NavLink>
               <NavLink to="/register">
-                <button className="w-full px-4 py-2 border-2 border-black rounded-lg">
+                <button className="px-3 py-1 border-2 border-emerald-400 text-emerald-600 text-shadow-2xs primary-font font-bold rounded-lg transform duration-200 hover:scale-110">
                   Register
                 </button>
               </NavLink>
@@ -190,16 +201,22 @@ export default function Navbar() {
               <NavLink to="/reviews" className={linkClasses}>
                 Reviews
               </NavLink>
+              <NavLink to="/profile" className={linkClasses}>
+                Profile
+              </NavLink>
+              <button onClick={handleLogout} className={linkClasses}>
+                Logout
+              </button>
 
               <NavLink to="/create">
-                <button className="w-full px-4 py-2 border-2 border-black rounded-lg">
+                <button className="px-3 py-1 border-2 border-emerald-400 text-emerald-600 text-shadow-2xs primary-font font-bold rounded-lg transform duration-200 hover:scale-110">
                   Create
                 </button>
               </NavLink>
 
               <NavLink to="/profile">
-                <div className="w-10 h-10 border-2 border-black rounded-full flex items-center justify-center font-bold">
-                  A
+                <div className="w-10 h-10 border-2 border-emerald-700 secondary-font rounded-full flex items-center justify-center font-bold">
+                  {user.name[0]}
                 </div>
               </NavLink>
             </>

@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import React from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
@@ -28,7 +28,7 @@ const routes = createBrowserRouter([
         element: <CreateRecipe />,
       },
       {
-        path: "/profile",
+        path: "/profile/:username",
         element: <Profile />,
       },
       {
@@ -43,9 +43,7 @@ const routes = createBrowserRouter([
   },
 ]);
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <AuthContextProvider>
-      <RouterProvider router={routes} />
-    </AuthContextProvider>
-  </StrictMode>
+  <AuthContextProvider>
+    <RouterProvider router={routes} />
+  </AuthContextProvider>
 );

@@ -5,8 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function useRecipeHooks() {
-  const { setRecipe, isLoggedIn } =
-    useContext(AuthContext);
+  const { setRecipe, isLoggedIn, setProfile } = useContext(AuthContext);
   const { post, get, put, del } = useApi();
   const navigate = useNavigate();
 
@@ -30,6 +29,9 @@ export default function useRecipeHooks() {
     if (!res?.success) return;
 
     setRecipe(res.recipe);
+
+    // Now fetch the author
+    getAuthorProfile(res.recipe.author);
   };
 
   const likeRecipe = async (id) => {
@@ -56,10 +58,21 @@ export default function useRecipeHooks() {
     toast.success("Recipe Deleted SuccessFully");
     navigate("/");
   };
+
+  const getAuthorProfile = async (id) => {
+    const res = await get(`/v4/user/${id}`);
+
+    if (!res?.success) return;
+
+    setProfile(res.user); // store recipe author's data
+  };
+
   return {
     createRecipe,
     getRecipe,
+    likeRecipe,
     updateRecipe,
     deleteRecipe,
+    getAuthorProfile,
   };
 }

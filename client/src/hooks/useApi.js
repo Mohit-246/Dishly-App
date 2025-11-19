@@ -12,7 +12,7 @@ export const useApi = () => {
       const res = await axiosInstance.get(url);
       return res.data;
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message || "Something went Wrong");
     } finally {
       setLoading(false);
     }
@@ -25,8 +25,8 @@ export const useApi = () => {
       return res.data;
     } catch (error) {
       console.log(error.message);
-      
-      toast.error(error.message);
+
+      toast.error(error.message || "Something went Wrong");
     } finally {
       setLoading(false);
     }
@@ -49,13 +49,12 @@ export const useApi = () => {
       setLoading(true);
       const res = await axiosInstance.delete(url);
       return res.data;
-    } catch (err) {
-      setError(err);
-      toast.error(err.response?.data?.message || "Delete failed!");
+    } catch (error) {
+      toast.error(error.message || "Delete failed!");
     } finally {
       setLoading(false);
     }
   };
 
-  return { get, post, loading ,put, del};
+  return { get, post, loading, put, del };
 };
