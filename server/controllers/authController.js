@@ -4,6 +4,8 @@ import generateTokens from "../config/jwtokens.js";
 
 export const register = async (req, res) => {
   try {
+    console.log(req.body);
+    
     const { name, username, email, password } = req.body;
     if (!name || !username || !email || !password) {
       return res.status(400).json({
@@ -83,6 +85,7 @@ export const login = async (req, res) => {
       success: true,
       message: "User logged in successfully",
       user: userExist,
+      token: generateTokens(userExist._id),
     });
   } catch (error) {
     return res.status(500).json({
@@ -112,6 +115,33 @@ export const getAllUser = async (req, res) => {
       success: true,
       message: "User found successfully",
       users,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const getMyProfile = async (req, res) => {
+  try {
+    // req.user is already decoded from middleware
+    const userId = req.user._id;
+
+    const user = await User.findById(userId).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "User found successfully",
+      user,
     });
   } catch (error) {
     return res.status(500).json({

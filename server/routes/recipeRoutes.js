@@ -10,12 +10,23 @@ import {
   getLikedRecipes,
 } from "../controllers/recipeController.js";
 
-import { authMiddleware, authorizeRecipeOwner, authorizeUser } from "../middleware/UserAuth.js";
-import upload from "../middleware/multer.js";
+import {
+  authMiddleware,
+  authorizeRecipeOwner,
+  authorizeUser,
+} from "../middleware/UserAuth.js";
+import { upload } from "../middleware/multer.js";
 
 const router = express.Router();
 
-router.post("/create",authMiddleware, upload.single("image"), addRecipe);
+const uploadRecipes = upload("recipes");
+
+router.post(
+  "/create",
+  authMiddleware,
+  uploadRecipes.single("image"),
+  addRecipe
+);
 router.post("like/:id", likeRecipe);
 
 router.get("/all", getAllRecipes);
