@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+#root {
+  scroll-behavior: smooth;
+}
+
 .primary-font {
   font-family: "Nunito", sans-serif;
 }

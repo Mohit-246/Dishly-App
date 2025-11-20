@@ -34,7 +34,7 @@ export const useApi = () => {
 
   const put = async (url, data) => {
     try {
-      setLoading(false);
+      setLoading(true);
       const res = await axiosInstance.put(url, data);
       return res.data;
     } catch (error) {

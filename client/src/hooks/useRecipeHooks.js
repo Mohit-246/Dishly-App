@@ -25,11 +25,10 @@ export default function useRecipeHooks() {
 
   const getRecipe = async (id) => {
     const res = await get(`/v4/recipe/${id}`);
-
     if (!res?.success) return;
 
     setRecipe(res.recipe);
-
+    console.log(res.recipe);
     // Now fetch the author
     getAuthorProfile(res.recipe.author);
   };

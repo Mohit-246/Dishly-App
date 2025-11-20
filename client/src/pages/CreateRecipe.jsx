@@ -106,7 +106,7 @@ export default function CreateRecipe() {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-100 py-10">
+      <div className="mt-20 min-h-screen bg-gray-100 py-10">
         <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-2xl p-8">
           <h1 className="text-3xl font-bold primary-font text-center mb-6 text-emerald-600">
             Add Your New Recipe

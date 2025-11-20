@@ -1,4 +1,4 @@
-import React from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
@@ -6,11 +6,11 @@ import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import CreateRecipe from "./pages/CreateRecipe.jsx";
 import Profile from "./pages/Profile.jsx";
-import SavedRecipe from "./pages/SavedRecipe.jsx";
+import RecipeDetail from "./pages/RecipeDetail.jsx";
 import ExploreRecipe from "./pages/ExploreRecipe.jsx";
-import { AuthContextProvider } from "./context/AuthContext.jsx";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Register from "./pages/Register.jsx";
+import AuthorProfilePage from "./pages/AuthorProfilePage.jsx";
+import { AuthContextProvider } from "./context/AuthContext.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -32,12 +32,16 @@ const routes = createBrowserRouter([
         element: <Profile />,
       },
       {
-        path: "/saved",
-        element: <SavedRecipe />,
+        path: "/recipe/:slug/:id",
+        element: <RecipeDetail />,
       },
       {
         path: "/explore",
         element: <ExploreRecipe />,
+      },
+      {
+        path: "/recipe/author/:slug/:id",
+        element: <AuthorProfilePage />,
       },
     ],
   },

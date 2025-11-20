@@ -1,41 +1,38 @@
-import React, { useContext, useState } from "react";
-import { AuthContext } from "../context/AuthContext";
-import { NavLink } from "react-router-dom";
-import RecipeCard from "../components/RecipeCard";
-import { Pencil } from "lucide-react";
+import React, { useContext, useEffect } from "react";
+import useRecipeHooks from "../hooks/useRecipeHooks";
 import Loader from "../components/Loader";
+import RecipeCard from "../components/RecipeCard";
+import { AuthContext } from "../context/AuthContext";
+import { useParams, NavLink } from "react-router-dom";
+import { Pencil } from "lucide-react";
 
-export default function ProfilePage() {
-  const { user, recipes } = useContext(AuthContext);
-  const usersRecipes = recipes.filter((recipe) => recipe.author === user._id);
+export default function AuthorProfilePage() {
+  const { id } = useParams();
+  const { getAuthorProfile } = useRecipeHooks();
+  const { profile, recipes } = useContext(AuthContext);
+  const usersRecipes = recipes.filter(
+    (recipe) => recipe.author === profile?._id
+  );
+  useEffect(() => {
+    getAuthorProfile(id);
+  },[id]);
 
-  const [editForm, setEditForm] = useState(false);
-  const [updatedData, setUpdatedData] = useState({
-    name: user.name,
-    description: user.description,
-    username: user.username,
-    image: File,
-  });
-
-  if (!user) {
-    return <Loader />;
-  }
-
+  if (!profile) return <Loader />;
   return (
     <>
       <div className="my-20 min-h-screen w-full bg-gray-100">
         {/* Top Banner */}
         <div
           className="w-full h-48 md:h-64 bg-cover bg-center"
-          style={{ backgroundImage: `url(${user.avatar})` }}
+          style={{ backgroundImage: `url(${profile.avatar})` }}
         ></div>
 
         {/* Profile Section */}
         <div className="max-w-5xl mx-auto px-4 -mt-16">
           <div className="flex flex-col md:flex-row items-center gap-4">
             <img
-              src={user.avatar}
-              alt={user.name}
+              src={profile.avatar}
+              alt={profile.name}
               className="w-28 h-28 rounded-full border-4 border-white object-cover"
             />
           </div>
@@ -43,48 +40,30 @@ export default function ProfilePage() {
             <div>
               <div className="mt-4">
                 <h1 className="text-3xl primary-font font-extrabold flex items-center gap-2">
-                  {user.name} <span className="text-blue-600 text-xl">●</span>
+                  {profile.name}{" "}
+                  <span className="text-blue-600 text-xl">●</span>
                 </h1>
                 <p className="secondary-font font-semibold text-gray-700">
-                  @{user.username}
+                  @{profile.username}
                 </p>
               </div>
 
               {/* About */}
               <p className="mt-4 para-font text-gray-700 max-w-2xl">
-                {user.description > 0 ? (
-                  <>{user.description}</>
-                ) : (
-                  <>
-                    <p className="mt-4 para-font text-gray-700 max-w-2xl">
-                      Add Description
-                    </p>
-                  </>
-                )}
+                {profile.description}
               </p>
             </div>
-            <button onClick={() => setEditForm(true)}>
-              <Pencil size={25} />
-            </button>
           </div>
 
           {/* Profile Details */}
           <div className="mt-6 secondary-font font-medium items-center bg-white shadow p-6 rounded-xl space-y-3">
             <p>
-              <span className="font-semibold">Email:</span> {user.email}
-            </p>
-            <p>
-              <span className="font-semibold">Password:</span> {"•".repeat(8)}
+              <span className="font-semibold">Email:</span> {profile.email}
             </p>
             <hr />
             <div className="mt-8">
               <div className=" flex items-center  justify-between px-6">
-                <h3 className=" text-2xl font-bold">Recipe Added :-</h3>
-                <NavLink to="/create">
-                  <button className="px-3 py-1 bg-emerald-400 text-white text-shadow-2xs primary-font font-bold rounded-lg transform duration-200 hover:scale-110">
-                    Add Recipe
-                  </button>
-                </NavLink>
+                <h3 className=" text-2xl font-bold">Recipes</h3>
               </div>
               {usersRecipes.length > 0 ? (
                 <div className=" mt-8 px-4 grid md:grid-cols-2 grid-cols-1">
@@ -95,7 +74,7 @@ export default function ProfilePage() {
               ) : (
                 <>
                   <h3 className="text-center mt-8 font-semibold text-gray-500">
-                    You have Added no reciepes
+                    User Don't Have Any Recipe
                   </h3>
                 </>
               )}

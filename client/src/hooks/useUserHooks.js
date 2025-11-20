@@ -4,7 +4,7 @@ import { useApi } from "./useApi";
 import { toast } from "react-toastify";
 
 export default function useUserHooks() {
-  const { setProfile, logout } = useContext(AuthContext);
+  const { setProfile, setUser, logout } = useContext(AuthContext);
   const { get, put, del } = useApi();
 
   const getUser = async (id) => {
@@ -12,8 +12,7 @@ export default function useUserHooks() {
 
     if (!res?.success) return;
 
-    
-    return res.user;
+    setUser(res.user);
   };
 
   const updateUser = async (id, data) => {
