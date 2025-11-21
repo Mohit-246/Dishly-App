@@ -97,13 +97,6 @@ export const login = async (req, res) => {
 
 export const getAllUser = async (req, res) => {
   try {
-    const { isAdmin } = req.body;
-    if (!isAdmin) {
-      return res.status(400).json({
-        success: false,
-        message: "Access Denied",
-      });
-    }
     const users = await User.find();
     if (!users) {
       return res.status(404).json({

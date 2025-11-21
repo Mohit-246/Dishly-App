@@ -10,7 +10,9 @@ export default function Navbar() {
   const location = useLocation();
 
   const shouldHide =
-    location.pathname === "/login" || location.pathname === "/register" || location.pathname ==="/create";
+    location.pathname === "/login" ||
+    location.pathname === "/register" ||
+    location.pathname === "/create";
 
   // 🔵 Center-Origin Underline Animation
   const linkClasses = ({ isActive }) =>
@@ -98,6 +100,13 @@ export default function Navbar() {
                   >
                     Profile
                   </NavLink>
+                  {user.isAdmin ? (
+                    <NavLink to={`/admin`} className={linkClasses}>
+                      Admin
+                    </NavLink>
+                  ) : (
+                    " "
+                  )}
                 </ul>
 
                 {/* SEARCH WITH SVG */}

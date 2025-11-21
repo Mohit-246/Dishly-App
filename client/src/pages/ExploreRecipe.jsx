@@ -1,10 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext.jsx";
 import RecipeCard from "../components/RecipeCard.jsx";
+import useRecipeHooks from "../hooks/useRecipeHooks.js";
 
 export default function ExploreRecipe() {
   const { recipes } = useContext(AuthContext);
 
+  const { getAllRecipe } = useRecipeHooks();
+  useEffect(() => {
+    getAllRecipe();
+  }, [recipes]);
   return (
     <div className="mt-20 min-h-screen items-center p-8">
       <div>

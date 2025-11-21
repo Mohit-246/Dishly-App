@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function useRecipeHooks() {
-  const { setRecipe, isLoggedIn, setProfile } = useContext(AuthContext);
+  const { setRecipe, setRecipes, isLoggedIn, setProfile } =
+    useContext(AuthContext);
   const { post, get, put, del } = useApi();
   const navigate = useNavigate();
 
@@ -31,6 +32,13 @@ export default function useRecipeHooks() {
     console.log(res.recipe);
     // Now fetch the author
     getAuthorProfile(res.recipe.author);
+  };
+
+  // GET ALL RECIPES
+  const getAllRecipe = async () => {
+    const res = await get(`/v4/recipe/all`);
+
+    setRecipes(res.recipes);
   };
 
   const likeRecipe = async (id) => {
@@ -69,6 +77,7 @@ export default function useRecipeHooks() {
   return {
     createRecipe,
     getRecipe,
+    getAllRecipe,
     likeRecipe,
     updateRecipe,
     deleteRecipe,

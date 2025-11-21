@@ -1,17 +1,33 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import RecipeCard from "../components/RecipeCard";
 import img1 from "../assets/home-cooking.png";
-import { ArrowDown, ArrowUp } from "lucide-react";
+import { ArrowUp } from "lucide-react";
+import useRecipeHooks from "../hooks/useRecipeHooks";
+import useUserHooks from "../hooks/useUserHooks";
 
 export default function Home() {
-  const { isLoggedIn, recipes } = useContext(AuthContext);
+  const { isLoggedIn, recipes, user } = useContext(AuthContext);
+  const { getAllRecipe } = useRecipeHooks();
+  const { getLoggedInUser } = useUserHooks();
+  useEffect(() => {
+    getAllRecipe();
+    getLoggedInUser();
+  }, []);
   return (
     <>
       <div className="mt-20 px-8">
         <div className="flex flex-col md:flex-row  items-center justify-evenly">
           <div className="px-8 py-4 space-y-3">
+            <h3 className="text-md text-emerald-800 font-extrabold primary-font">
+              Welcome{" "}
+              {user.name > 0 ? (
+                <>{user.name}</>
+              ) : (
+                <>to Our Friendly Dishly !!</>
+              )}
+            </h3>
             <div className="text-4xl font-extrabold primary-font text-emerald-600">
               <h1>Your Kitchen Adventure Starts NOW</h1>
               <h1>Cook Delecious</h1>
@@ -58,8 +74,8 @@ export default function Home() {
             And Share with your Friends
           </h3>
         </div>
-        <div className="flex mt-10 items-center justify-center">
-          <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="flex mt-10 items-center justify-center px-4">
+          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 gap-6">
             {recipes?.slice(0, 9).map((item) => (
               <RecipeCard key={item._id} recipe={item} />
             ))}

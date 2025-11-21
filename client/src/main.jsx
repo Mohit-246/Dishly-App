@@ -11,6 +11,8 @@ import ExploreRecipe from "./pages/ExploreRecipe.jsx";
 import Register from "./pages/Register.jsx";
 import AuthorProfilePage from "./pages/AuthorProfilePage.jsx";
 import { AuthContextProvider } from "./context/AuthContext.jsx";
+import AdminDashboard from "./Admin/AdminDashboard.jsx";
+import Reviews from "./pages/Reviews.jsx";
 
 const routes = createBrowserRouter([
   {
@@ -42,6 +44,14 @@ const routes = createBrowserRouter([
       {
         path: "/recipe/author/:slug/:id",
         element: <AuthorProfilePage />,
+      },
+      {
+        path: "/reviews",
+        element: <Reviews />,
+      },
+      {
+        path: "/admin",
+        element: <AdminDashboard />,
       },
     ],
   },

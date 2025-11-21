@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Lock, User } from "lucide-react";
+import { Eye, EyeOff, Lock, User } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
 export default function Login() {
   const { login } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     identifier: "",
     password: "",
@@ -29,7 +30,7 @@ export default function Login() {
   };
   return (
     <>
-      <div className="flex items-center justify-center h-screen -z-50 bg-linear-to-br from-green-600 via-green-200 to-green-400">
+      <div className="mt-20 flex items-center justify-center h-screen -z-50 bg-linear-to-br from-green-600 via-green-200 to-green-400">
         <div className="max-w-min bg-gray-100 rounded-4xl px-6 py-8 shadow-2xl">
           <div className="w-full text-center">
             <h2 className="text-4xl primary-font font-bold text-emerald-600">
@@ -51,16 +52,23 @@ export default function Login() {
                 className="text-md font-semibold secondary-font focus:outline-none"
               />
             </div>
-            <div className="w-full flex items-center rounded-full gap-2 px-4 py-3 bg-gray-300">
+            <div className="relative w-full flex items-center rounded-full gap-2 px-4 py-3 bg-gray-300">
               <Lock size={20} />
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Password"
                 className="text-md font-semibold secondary-font focus:outline-none"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
             </div>
             <div className="mt-6 flex items-center justify-center gap-4">
               <button
