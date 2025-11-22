@@ -24,9 +24,6 @@ axiosInstance.interceptors.response.use(
 
       // Notify user
       toast.error("Session expired. Please login again.");
-
-      // Redirect to login
-      window.location.href = "/login";
     }
 
     return Promise.reject(error);

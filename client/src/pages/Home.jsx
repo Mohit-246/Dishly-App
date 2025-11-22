@@ -8,12 +8,10 @@ import useRecipeHooks from "../hooks/useRecipeHooks";
 import useUserHooks from "../hooks/useUserHooks";
 
 export default function Home() {
-  const { isLoggedIn, recipes, user } = useContext(AuthContext);
+  const { isLoggedIn, recipes} = useContext(AuthContext);
   const { getAllRecipe } = useRecipeHooks();
-  const { getLoggedInUser } = useUserHooks();
   useEffect(() => {
     getAllRecipe();
-    getLoggedInUser();
   }, []);
   return (
     <>
@@ -21,12 +19,7 @@ export default function Home() {
         <div className="flex flex-col md:flex-row  items-center justify-evenly">
           <div className="px-8 py-4 space-y-3">
             <h3 className="text-md text-emerald-800 font-extrabold primary-font">
-              Welcome{" "}
-              {user?.name > 0 ? (
-                <>{user?.name}</>
-              ) : (
-                <>to Our Friendly Dishly !!</>
-              )}
+              Welcome to Our Friendly Dishly !!
             </h3>
             <div className="text-4xl font-extrabold primary-font text-emerald-600">
               <h1>Your Kitchen Adventure Starts NOW</h1>
