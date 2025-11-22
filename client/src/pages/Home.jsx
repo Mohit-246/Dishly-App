@@ -22,8 +22,8 @@ export default function Home() {
           <div className="px-8 py-4 space-y-3">
             <h3 className="text-md text-emerald-800 font-extrabold primary-font">
               Welcome{" "}
-              {user.name > 0 ? (
-                <>{user.name}</>
+              {user?.name > 0 ? (
+                <>{user?.name}</>
               ) : (
                 <>to Our Friendly Dishly !!</>
               )}
