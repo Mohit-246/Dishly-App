@@ -156,84 +156,95 @@ export default function Navbar() {
           </>
         )}
 
-        {/* MOBILE MENU BUTTON */}
-        <button
-          className="md:hidden px-3 py-1 border-2 border-emerald-400 text-emerald-600 text-shadow-2xs primary-font font-bold rounded-lg transform duration-200 hover:scale-110"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          ☰
-        </button>
+        {!shouldHide && (
+          <>
+            <NavLink to="/profile">
+              <div className=" md:hidden w-10 h-10 border-2 border-emerald-700 secondary-font rounded-full flex items-center justify-center font-bold">
+                {user.name[0]}
+              </div>
+            </NavLink>
+            {/* MOBILE MENU BUTTON */}
+            <button
+              className="md:hidden px-3 py-1 border-2 border-emerald-400 text-emerald-600 text-shadow-2xs primary-font font-bold rounded-lg transform duration-200 hover:scale-110"
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
+              ☰
+            </button>
 
-        {/* MOBILE MENU DROPDOWN —–––––––––––––––––––––––––––––––––– */}
-        {menuOpen && (
-          <div className="absolute top-20 left-0 w-full bg-white border-b border-gray-300 p-6 flex flex-col gap-5 md:hidden z-50">
-            {/* SEARCH MOBILE */}
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search..."
-                className="border-2 border-black rounded-full px-12 py-2 w-full"
-              />
-              <svg
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-700"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-              >
-                <path d="M21 21l-4.35-4.35M10 4a6 6 0 016 6 6 6 0 11-6-6z" />
-              </svg>
-            </div>
-            {/* BEFORE LOGIN (MOBILE) */}
-            {!isLoggedIn && (
-              <>
-                <NavLink to="/login">
-                  <button className="px-3 py-1 border-2 border-emerald-400 text-emerald-600 text-shadow-2xs primary-font font-bold rounded-lg transform duration-200 hover:scale-110">
-                    Login
-                  </button>
-                </NavLink>
-                <NavLink to="/register">
-                  <button className="px-3 py-1 border-2 border-emerald-400 text-emerald-600 text-shadow-2xs primary-font font-bold rounded-lg transform duration-200 hover:scale-110">
-                    Register
-                  </button>
-                </NavLink>
-              </>
+            {/* MOBILE MENU DROPDOWN —–––––––––––––––––––––––––––––––––– */}
+            {menuOpen && (
+              <div className="absolute top-20 left-0 w-full bg-white border-b border-gray-300 p-6 flex flex-col gap-5 md:hidden z-50">
+                {/* SEARCH MOBILE */}
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    className="border-2 border-black rounded-full px-12 py-2 w-full"
+                  />
+                  <svg
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-700"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M21 21l-4.35-4.35M10 4a6 6 0 016 6 6 6 0 11-6-6z" />
+                  </svg>
+                </div>
+                {/* BEFORE LOGIN (MOBILE) */}
+                {!isLoggedIn && (
+                  <>
+                    <NavLink to="/login" className={linkClasses}>
+                      <button onClick={() => setMenuOpen(!menuOpen)}>
+                        Login
+                      </button>
+                    </NavLink>
+                    <NavLink to="/register" className={linkClasses}>
+                      <button onClick={() => setMenuOpen(!menuOpen)}>
+                        Register
+                      </button>
+                    </NavLink>
+                  </>
+                )}
+
+                {/* AFTER LOGIN (MOBILE) */}
+                {isLoggedIn && (
+                  <>
+                    <NavLink to="/" className={linkClasses}>
+                      <button onClick={() => setMenuOpen(!menuOpen)}>
+                        Home
+                      </button>
+                    </NavLink>
+                    <NavLink to="/explore" className={linkClasses}>
+                      <button onClick={() => setMenuOpen(!menuOpen)}>
+                        Explore
+                      </button>
+                    </NavLink>
+
+                    <NavLink to="/reviews" className={linkClasses}>
+                      <button onClick={() => setMenuOpen(!menuOpen)}>
+                        Reviews
+                      </button>
+                    </NavLink>
+                    <NavLink to="/profile" className={linkClasses}>
+                      <button onClick={() => setMenuOpen(!menuOpen)}>
+                        Profile
+                      </button>
+                    </NavLink>
+                    <button onClick={handleLogout} className={linkClasses}>
+                      Logout
+                    </button>
+
+                    <NavLink to="/create" className={linkClasses}>
+                      <button onClick={() => setMenuOpen(!menuOpen)}>
+                        Create
+                      </button>
+                    </NavLink>
+                  </>
+                )}
+              </div>
             )}
-
-            {/* AFTER LOGIN (MOBILE) */}
-            {isLoggedIn && (
-              <>
-                <NavLink to="/" className={linkClasses}>
-                  Home
-                </NavLink>
-                <NavLink to="/explore" className={linkClasses}>
-                  Explore
-                </NavLink>
-
-                <NavLink to="/reviews" className={linkClasses}>
-                  Reviews
-                </NavLink>
-                <NavLink to="/profile" className={linkClasses}>
-                  Profile
-                </NavLink>
-                <button onClick={handleLogout} className={linkClasses}>
-                  Logout
-                </button>
-
-                <NavLink to="/create">
-                  <button className="px-3 py-1 border-2 border-emerald-400 text-emerald-600 text-shadow-2xs primary-font font-bold rounded-lg transform duration-200 hover:scale-110">
-                    Create
-                  </button>
-                </NavLink>
-
-                <NavLink to="/profile">
-                  <div className="w-10 h-10 border-2 border-emerald-700 secondary-font rounded-full flex items-center justify-center font-bold">
-                    {user.name[0]}
-                  </div>
-                </NavLink>
-              </>
-            )}
-          </div>
+          </>
         )}
       </nav>
     </div>
