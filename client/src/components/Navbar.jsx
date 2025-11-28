@@ -100,7 +100,7 @@ export default function Navbar() {
                   >
                     Profile
                   </NavLink>
-                  {user.isAdmin ? (
+                  {user?.isAdmin ? (
                     <NavLink to={`/admin`} className={linkClasses}>
                       Admin
                     </NavLink>
@@ -160,7 +160,7 @@ export default function Navbar() {
           <>
             <NavLink to="/profile">
               <div className=" md:hidden w-10 h-10 border-2 border-emerald-700 secondary-font rounded-full flex items-center justify-center font-bold">
-                {user.name[0]}
+                {user?.name[0]}
               </div>
             </NavLink>
             {/* MOBILE MENU BUTTON */}
@@ -231,9 +231,11 @@ export default function Navbar() {
                         Profile
                       </button>
                     </NavLink>
-                    <button onClick={handleLogout} className={linkClasses}>
-                      Logout
-                    </button>
+                    <NavLink>
+                      <button onClick={handleLogout} className={linkClasses}>
+                        Logout
+                      </button>
+                    </NavLink>
 
                     <NavLink to="/create" className={linkClasses}>
                       <button onClick={() => setMenuOpen(!menuOpen)}>
